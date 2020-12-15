@@ -1,9 +1,14 @@
 package com.springboot.parkinglot.serviceimpl;
 
+
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import com.springboot.parkinglot.model.VehicleDTO;
 import com.springboot.parkinglot.repository.ParkingRepository;
@@ -43,12 +48,24 @@ public class ParkingServiceImpl implements ParkingService {
 
 	@Override
 	public String unpark(Long id) {
+		Long timeSpendMin = 0L;
 		if (id > 0 && id <= 10) {
+			Optional<VehicleDTO> vichelTobeDeleted = parkingRepository.findById(id);
+			if (vichelTobeDeleted.isPresent()) {
+				VehicleDTO currentVichel = vichelTobeDeleted.get();
+				Date initialtime = currentVichel.getParkedAt();
+			    Date currentime= new Date();
+			    Long diff = currentime.getTime() - initialtime.getTime();
+			    timeSpendMin = TimeUnit.MILLISECONDS.toMinutes(diff);
+			   
+			}
 			parkingRepository.deleteById(id);
 		} else {
 			throw new RuntimeException("Please provide an id between 1 and 10");
 		}
-		return "Unparked the Vehcle with id" + id;
+		return "The Vehicle has used  " + timeSpendMin + "   Minutes ";
 	}
+	
+	
 
 }

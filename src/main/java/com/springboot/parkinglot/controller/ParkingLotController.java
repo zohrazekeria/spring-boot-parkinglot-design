@@ -44,7 +44,7 @@ public class ParkingLotController {
 	public String park(VehicleDTO vehicleDTO) {
 		return parkingService.park(vehicleDTO);
 	}
-	@DeleteMapping("/park")
+	@DeleteMapping("/unpark")
 	public String unpark(Long id) {
 		return parkingService.unpark(id);
 	}
